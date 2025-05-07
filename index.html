@@ -145,23 +145,21 @@
         /* Cytaty usunięte */
         /* Styl przycisku muzyki */
         .music-btn {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 32px auto 0 auto;
             background: #111;
             color: #ff0033;
             border: 2px solid #ff0033aa;
             border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 70px;
+            height: 70px;
             font-size: 1.6em;
             cursor: pointer;
             box-shadow: 0 2px 12px #ff003344, 0 2px 8px #000a;
             transition: background 0.2s, color 0.2s;
+            position: static;
         }
         .music-btn.active {
             background: #ff0033;
@@ -173,10 +171,7 @@
     </style>
 </head>
 <body>
-    <!-- Przycisk muzyki -->
-    <button class="music-btn" id="music-btn" title="Włącz/Wyłącz muzykę" aria-label="Włącz/Wyłącz muzykę">
-        &#127925;
-    </button>
+
     <!-- Nagłówek strony -->
     <h1></h1>
     <!-- LICZNIK: Główna sekcja licznika czasu -->
@@ -222,7 +217,10 @@
             <div class="flip-label">sek</div>
         </div>
     </div>
-
+    <!-- Przycisk muzyki -->
+    <button class="music-btn" id="music-btn" title="Włącz/Wyłącz muzykę" aria-label="Włącz/Wyłącz muzykę">
+        &#127925;
+    </button>
     <!-- AUDIO: Ukryty odtwarzacz muzyki -->
     <audio id="music-audio" loop preload="auto">
         <source src="The Illusionist Cinematic Orchestral CC-BY - Scott Buckley.mp3" type="audio/mpeg">
