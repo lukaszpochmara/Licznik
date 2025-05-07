@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Licznik</title>
+    <!-- STYLE: Wygląd strony i licznika -->
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 32px;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: #fff;
+            text-shadow: 0 2px 24px #ff0033cc, 0 2px 12px #0006;
+        }
+        .flip-clock {
+            display: flex;
+            gap: 32px;
+            background: rgba(20, 20, 20, 0.85);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px #ff003355, 0 8px 32px #0005;
+            padding: 32px 40px;
+            position: relative;
+            border: 2px solid #ff003388;
+        }
+        .flip-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .flip-label {
+            font-size: 1em;
+            margin-top: 14px;
+            color: #ff0033;
+            letter-spacing: 1px;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px #ff003399;
+        }
+        .flip-card {
+            width: 80px;
+            height: 110px;
+            margin: 0 2px;
+            background: #111;
+            border-radius: 16px;
+            box-shadow: 0 0 32px #ff003355, 0 2px 8px #000a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .flip-card-inner {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .flip-card-front, .flip-card-back {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.6em;
+            font-family: 'Orbitron', 'Seven Segment', 'JetBrains Mono', 'Fira Mono', 'Courier New', Courier, monospace;
+            font-weight: 900;
+            color: #ff0033;
+            letter-spacing: 2px;
+            background: linear-gradient(180deg, #222 60%, #111 100%);
+            text-shadow:
+                0 0 24px #ff0033cc,
+                0 0 8px #ff0033,
+                0 2px 8px #000a;
+            border-bottom: 3px solid #ff003388;
+            border-top: 3px solid #ff003344;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .flip-card-front {
+            z-index: 2;
+        }
+        .flip-card-back {
+            display: none;
+        }
+        .flip-card-front, .flip-card-back {
+            position: relative;
+        }
+        .flip-card-front::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            box-shadow:
+                0 0 32px 8px #ff003333,
+                0 0 0 2px #ff003344 inset;
+            pointer-events: none;
+        }
+        @media (max-width: 700px) {
+            .flip-clock {
+                gap: 12px;
+                padding: 18px 6px;
+            }
+            .flip-card {
+                width: 48px;
+                height: 65px;
+            }
+            .flip-label {
+                font-size: 0.8em;
+            }
+            h1 {
+                font-size: 1.2em;
+            }
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap');
+        @media (max-width: 700px) {
+            .flip-clock {
+                gap: 12px;
+                padding: 18px 6px;
+            }
+            .flip-card {
+                width: 48px;
+                height: 65px;
+            }
+            .flip-label {
+                font-size: 0.8em;
+            }
+            h1 {
+                font-size: 1.2em;
+            }
+        }
+        /* Cytaty usunięte */
+        /* Styl przycisku muzyki */
+        .music-btn {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 100;
+            background: #111;
+            color: #ff0033;
+            border: 2px solid #ff0033aa;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6em;
+            cursor: pointer;
+            box-shadow: 0 2px 12px #ff003344, 0 2px 8px #000a;
+            transition: background 0.2s, color 0.2s;
+        }
+        .music-btn.active {
+            background: #ff0033;
+            color: #fff;
+        }
+        .music-btn:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Przycisk muzyki -->
+    <button class="music-btn" id="music-btn" title="Włącz/Wyłącz muzykę" aria-label="Włącz/Wyłącz muzykę">
+        &#127925;
+    </button>
+    <!-- Nagłówek strony -->
+    <h1></h1>
+    <!-- LICZNIK: Główna sekcja licznika czasu -->
+    <div class="flip-clock" id="countdown">
+        <!-- Jednostka: dni -->
+        <div class="flip-unit">
+            <div class="flip-card" id="days-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front" id="days-front">00</div>
+                    <div class="flip-card-back" id="days-back">00</div>
+                </div>
+            </div>
+            <div class="flip-label">dni</div>
+        </div>
+        <!-- Jednostka: godziny -->
+        <div class="flip-unit">
+            <div class="flip-card" id="hours-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front" id="hours-front">00</div>
+                    <div class="flip-card-back" id="hours-back">00</div>
+                </div>
+            </div>
+            <div class="flip-label">godz</div>
+        </div>
+        <!-- Jednostka: minuty -->
+        <div class="flip-unit">
+            <div class="flip-card" id="minutes-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front" id="minutes-front">00</div>
+                    <div class="flip-card-back" id="minutes-back">00</div>
+                </div>
+            </div>
+            <div class="flip-label">min</div>
+        </div>
+        <!-- Jednostka: sekundy -->
+        <div class="flip-unit">
+            <div class="flip-card" id="seconds-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front" id="seconds-front">00</div>
+                    <div class="flip-card-back" id="seconds-back">00</div>
+                </div>
+            </div>
+            <div class="flip-label">sek</div>
+        </div>
+    </div>
+
+    <!-- AUDIO: Ukryty odtwarzacz muzyki -->
+    <audio id="music-audio" loop preload="auto">
+        <source src="The Illusionist Cinematic Orchestral CC-BY - Scott Buckley.mp3" type="audio/mpeg">
+        Twoja przeglądarka nie obsługuje odtwarzacza audio.
+    </audio>
+
+    <!-- SKRYPT: Logika licznika -->
+    <script>
+        // Ustaw datę egzaminu (6 lipca 2025, 09:00)
+        const examDate = new Date("July 6, 2025 09:00:00").getTime();
+
+        // Przechowuj poprzednie wartości
+        let prev = {days: null, hours: null, minutes: null, seconds: null};
+
+        // Funkcja do formatowania liczb (np. 7 -> "07")
+        function pad(n) {
+            return n < 10 ? "0" + n : "" + n;
+        }
+
+        // Blokada animacji, aby nie nakładały się na siebie
+        const flipLocks = {};
+
+        // Animacja zmiany wartości na liczniku
+        function flip(cardId, frontId, backId, newValue) {
+            const card = document.getElementById(cardId);
+            const front = document.getElementById(frontId);
+            const back = document.getElementById(backId);
+
+            if (front.textContent !== pad(newValue) && !flipLocks[cardId]) {
+                flipLocks[cardId] = true;
+                back.textContent = pad(newValue);
+                card.classList.add('flipping');
+                setTimeout(() => {
+                    front.textContent = pad(newValue);
+                    card.classList.remove('flipping');
+                    flipLocks[cardId] = false;
+                }, 500);
+            }
+        }
+
+        // Aktualizacja licznika co sekundę
+        function updateCountdown() {
+            const now = new Date().getTime();
+            let distance = examDate - now;
+
+            if (distance < 0) distance = 0;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Animuj tylko jeśli wartość się zmieniła
+            if (prev.days !== days) flip('days-card', 'days-front', 'days-back', days);
+            if (prev.hours !== hours) flip('hours-card', 'hours-front', 'hours-back', hours);
+            if (prev.minutes !== minutes) flip('minutes-card', 'minutes-front', 'minutes-back', minutes);
+            if (prev.seconds !== seconds) flip('seconds-card', 'seconds-front', 'seconds-back', seconds);
+
+            prev = {days, hours, minutes, seconds};
+
+            // Po zakończeniu odliczania
+            if (distance === 0) {
+                clearInterval(countdownFunction);
+                document.getElementById("countdown").innerHTML = "<span style='font-size:2em'>Egzamin rozpoczęty!</span>";
+            }
+        }
+
+        // Inicjalizacja licznika
+        updateCountdown();
+        const countdownFunction = setInterval(updateCountdown, 1000);
+
+        // MUZYKA: obsługa przycisku muzyki
+        const musicBtn = document.getElementById('music-btn');
+        const musicAudio = document.getElementById('music-audio');
+        let musicPlaying = false;
+
+        musicBtn.addEventListener('click', function() {
+            if (!musicPlaying) {
+                musicAudio.play();
+                musicBtn.classList.add('active');
+                musicPlaying = true;
+            } else {
+                musicAudio.pause();
+                musicBtn.classList.remove('active');
+                musicPlaying = false;
+            }
+        });
+
+        // Zatrzymaj muzykę po zakończeniu odliczania
+        musicAudio.addEventListener('ended', function() {
+            musicBtn.classList.remove('active');
+            musicPlaying = false;
+        });
+    </script>
+</body>
+</html>

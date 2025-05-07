@@ -1,0 +1,132 @@
+/* Ogólne ustawienia strony */
+body {
+    background: linear-gradient(-45deg, #000, #001f2f, #000, #001f2f);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    color: #fff;
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+h1 {
+    font-size: 2.2em;
+    margin-bottom: 32px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 2px 24px #00eaffcc, 0 2px 12px #0006;
+}
+
+/* Licznik */
+.flip-clock {
+    display: flex;
+    gap: 32px;
+    background: rgba(20, 20, 20, 0.85);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px #00eaff55, 0 8px 32px #0005;
+    padding: 32px 40px;
+    position: relative;
+    border: 2px solid #00eaff88;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 32px #00eaff55, 0 8px 32px #0005; }
+    50% { box-shadow: 0 0 64px #00eaffaa, 0 8px 32px #0007; }
+    100% { box-shadow: 0 0 32px #00eaff55, 0 8px 32px #0005; }
+}
+
+.flip-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.flip-label {
+    font-size: 1em;
+    margin-top: 14px;
+    color: #00eaff;
+    letter-spacing: 1px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px #00eaff99;
+}
+
+.flip-card {
+    width: 80px;
+    height: 110px;
+    margin: 0 2px;
+    background: #111;
+    border-radius: 16px;
+    box-shadow: 0 0 32px #00eaff55, 0 2px 8px #000a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.flip-card-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flip-card-front, .flip-card-back {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.6em;
+    font-family: 'Orbitron', 'Seven Segment', 'JetBrains Mono', 'Fira Mono', 'Courier New', Courier, monospace;
+    font-weight: 900;
+    color: #00eaff;
+    letter-spacing: 2px;
+    background: linear-gradient(180deg, #222 60%, #111 100%);
+    text-shadow: 0 0 24px #00eaffcc, 0 0 8px #00eaff, 0 2px 8px #000a;
+    border-bottom: 3px solid #00eaff88;
+    border-top: 3px solid #00eaff44;
+}
+
+.flip-card-front::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    box-shadow: 0 0 32px 8px #00eaff33, 0 0 0 2px #00eaff44 inset;
+    pointer-events: none;
+}
+
+/* Responsywność */
+@media (max-width: 700px) {
+    .flip-clock {
+        gap: 12px;
+        padding: 18px 6px;
+    }
+    .flip-card {
+        width: 48px;
+        height: 65px;
+    }
+    .flip-label {
+        font-size: 0.8em;
+    }
+    h1 {
+        font-size: 1.2em;
+    }
+}
